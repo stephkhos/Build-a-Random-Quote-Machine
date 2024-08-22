@@ -1,36 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+const quoteContainer = document.getElementById('quote-container');
+const quoteText = document.getElementById('quote');
+const authorText = document.getElementById('author');
+const newQuoteButton = document.getElementById('new-quote');
 
-function App() {
-  const [quote, setQuote] = useState('');
-  const [author, setAuthor] = useState('');
+const quotes = [
+  {
+    quote: 'Believe you can and you\'re halfway there.',
+    author: 'Theodore Roosevelt'
+  },
+  {
+    quote: 'The only way to do great work is to love what you do.',
+    author: 'Steve Jobs'
+  },
+  {
+    quote: 'Success is not final, failure is not fatal: It is the courage to continue that counts.',
+    author: 'Winston Churchill'
+  },
+  {
+    quote: 'Don\'t watch the clock; do what it does. Keep going.',
+    author: 'Sam Levenson'
+  },
+  {
+    quote: 'You miss 100% of the shots you don\'t take.',
+    author: 'Wayne Gretzky'
+  }
+];
 
-  const handleNewQuote = async () => {
-    const response = await fetch('https://api.quotable.io/random');
-    const data = await response.json();
-    setQuote(data.content);
-    setAuthor(data.author);
-  };
-
-  useEffect(() => {
-    handleNewQuote();
-  }, []);
-
-  const tweetQuote = () => {
-    const tweetURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quote)} - ${encodeURIComponent(author)}`;
-    window.open(tweetURL, '_blank');
-  };
-
-  return (
-    <div className="quote-box" id="quote-box">
-      <p id="text">{quote}</p>
-      <p id="author">- {author}</p>
-      <button id="new-quote" onClick={handleNewQuote}>New Quote</button>
-      <a id="tweet-quote" href="#" onClick={tweetQuote}>
-        <i className="fa-brands fa-twitter"></i> Tweet Quote
-      </a>
-    </div>
-  );
+function getRandomQuote() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  const quote = quotes[randomIndex];
+  quoteText.textContent = quote.quote;
+  authorText.textContent = quote.author;
 }
 
-export default App;
+newQuoteButton.addEventListener('click', getRandomQuote);
+
+getRandomQuote(); // display a quote on page load
